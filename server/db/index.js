@@ -6,6 +6,7 @@ async function connectToDB() {
     await mongoose.connect(MONGO_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useCreateIndex: true,
     });
   } catch (err) {
     console.log('Error connecting to MongoDB:');
