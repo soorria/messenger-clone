@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -16,16 +16,8 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-const User = mongoose.model('user', UserSchema);
-
-UserSchema.pre('save', async function (next) {
-  const salt = await bcrypt.genSalt();
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
-
-UserSchema.statics.login = async (username, password) => {
-  const user = await User.findOne({ username });
+UserSchema.statics.login = async function (username, password) {
+  const user = await this.findOne({ username });
 
   if (user) {
     if (await bcrypt.compare(password, user.password)) {
@@ -33,7 +25,9 @@ UserSchema.statics.login = async (username, password) => {
     }
   }
 
-  throw new Error('Invalid login');
+  throw new Error("Invalid login");
 };
+
+const User = mongoose.model("user", UserSchema);
 
 module.exports = User;

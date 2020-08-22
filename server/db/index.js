@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 async function connectToDB() {
   const { MONGO_URI } = process.env;
@@ -9,7 +9,7 @@ async function connectToDB() {
       useCreateIndex: true,
     });
   } catch (err) {
-    console.log('Error connecting to MongoDB:');
+    console.log("Error connecting to MongoDB:");
     throw err;
   }
 }

@@ -1,16 +1,16 @@
-const express = require('express');
-const { createServer } = require('http');
-const Server = require('socket.io');
-const dotenv = require('dotenv');
-const volleyball = require('volleyball');
-const cors = require('cors');
-const helmet = require('helmet');
+const express = require("express");
+const { createServer } = require("http");
+const Server = require("socket.io");
+const dotenv = require("dotenv");
+const volleyball = require("volleyball");
+const cors = require("cors");
+const helmet = require("helmet");
 
-const cookieParser = require('cookie-parser');
-const connectToDB = require('./db');
-const allRoutes = require('./routes');
-const notFound = require('./middlewares/notFound');
-const errorHandler = require('./middlewares/errorHandler');
+const cookieParser = require("cookie-parser");
+const connectToDB = require("./db");
+const allRoutes = require("./routes");
+const notFound = require("./middlewares/notFound");
+const errorHandler = require("./middlewares/errorHandler");
 
 dotenv.config();
 
@@ -38,11 +38,11 @@ dotenv.config();
   await connectToDB();
 
   // Socket connection
-  io.on('connection', (socket) => {
-    console.log('User connected');
+  io.on("connection", (socket) => {
+    console.log("User connected");
 
-    socket.on('disconnect', () => {
-      console.log('User disconnected');
+    socket.on("disconnect", () => {
+      console.log("User disconnected");
     });
   });
 

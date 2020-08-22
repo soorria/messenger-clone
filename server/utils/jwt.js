@@ -1,8 +1,8 @@
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
-const { JWT_MAX_AGE } = require('../constants');
+const { JWT_MAX_AGE } = require("../constants");
 
-const JWT_SECRET = process.env.JWT_SECRET || 'bad secret';
+const JWT_SECRET = process.env.JWT_SECRET || "bad secret";
 
 function createToken(obj) {
   return jwt.sign(obj, JWT_SECRET, {
