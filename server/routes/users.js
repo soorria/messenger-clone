@@ -1,15 +1,17 @@
 const express = require("express");
 const {
   usersGetAll,
-  userGetById,
+  usersGetById,
+  usersGetMe,
   userDelete,
 } = require("../controllers/users");
-const { requireAuth } = require("../middlewares/auth");
+const { requireAuth, checkAuth } = require("../middlewares/auth");
 
 const router = express.Router();
 
 router.get("/", usersGetAll);
-router.get("/:id", userGetById);
+router.get("/me", checkAuth, usersGetMe);
+router.get("/:id", usersGetById);
 router.delete("/:id", requireAuth, userDelete);
 
 module.exports = router;

@@ -9,7 +9,21 @@ module.exports.usersGetAll = async (req, res, next) => {
   }
 };
 
-module.exports.userGetById = async (req, res, next) => {
+module.exports.usersGetMe = async (req, res, next) => {
+  if (res.locals.userId) {
+    try {
+      const user = await User.findById(res.locals.userId).select("-password");
+      res.status(200).send({ user });
+    } catch (err) {
+      res.status(200).send({ user: null });
+    }
+  } else {
+    res.status(200).send({ user: null });
+  }
+  res.status(200);
+};
+
+module.exports.usersGetById = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id).select("-password");
 
@@ -20,7 +34,8 @@ module.exports.userGetById = async (req, res, next) => {
     res.status(404);
     next(new Error("user does not exist"));
   } catch (err) {
-    next(err);
+    res.status(404);
+    next(new Error("user does not exist"));
   }
 };
 

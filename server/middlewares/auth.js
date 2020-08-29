@@ -1,23 +1,28 @@
 const { verifyToken } = require("../utils/jwt");
 
-module.exports.requireAuth = (req, res, next) => {
-  function doError() {
-    res.status(401);
+const requireAuth = (req, res, next) => {
+  checkAuth(req, res);
+
+  if (!res.locals.userId) {
     next(new Error("user not logged in"));
   }
+};
+module.exports.requireAuth = requireAuth;
 
+const checkAuth = (req, res, next) => {
   const token = req.cookies.jwt;
-  console.log(token);
 
   if (token) {
     try {
       const decoded = verifyToken(token);
       res.locals.userId = decoded.id;
-      next();
     } catch (err) {
-      doError();
+      res.locals.userId = null;
     }
   } else {
-    doError();
+    res.locals.userId = null;
   }
+
+  if (next) next();
 };
+module.exports.checkAuth = checkAuth;
