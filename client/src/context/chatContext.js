@@ -47,13 +47,13 @@ const ChatContextProvider = ({ children }) => {
 
     fetchUsers()
 
-    // const interval = setInterval(() => {
-    //   fetchUsers()
-    // }, 1000 * 60)
+    const interval = setInterval(() => {
+      fetchUsers()
+    }, 1000 * 60)
 
-    // return () => {
-    //   clearInterval(interval)
-    // }
+    return () => {
+      clearInterval(interval)
+    }
   }, [toast])
 
   useEffect(() => {
