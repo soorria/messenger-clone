@@ -22,6 +22,8 @@ dotenv.config();
 
 const userIdToSocket = new Map();
 
+const origin = process.env.WEB_URL || "http://localhost:3000";
+
 (async () => {
   const app = express();
   const http = createServer(app);
@@ -38,7 +40,7 @@ const userIdToSocket = new Map();
   app.use(helmet());
   app.use(
     cors({
-      origin: process.env.WEB_URL || "http://localhost:3000",
+      origin
       credentials: true,
     })
   );
@@ -50,7 +52,7 @@ const userIdToSocket = new Map();
   await connectToDB();
 
   const io = new Server(http, {
-    origins: ["http://localhost:3000"],
+    origins: [origin],
   });
 
   // Socket connection
