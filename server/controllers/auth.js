@@ -13,7 +13,8 @@ module.exports.loginPost = async (req, res, next) => {
       .cookie("jwt", createToken({ id: user._id }), {
         httpOnly: true,
         maxAge: JWT_MAX_AGE * 1000,
-        sameSite: "lax",
+        sameSite: "none",
+        secure: true,
       })
       .status(200)
       .send({ user: user._id });
@@ -37,7 +38,8 @@ module.exports.signupPost = async (req, res, next) => {
       .cookie("jwt", createToken({ id: user._id }), {
         httpOnly: true,
         maxAge: JWT_MAX_AGE * 1000,
-        sameSite: "lax",
+        sameSite: "none",
+        secure: true,
       })
       .status(201)
       .send({ user: user._id });
