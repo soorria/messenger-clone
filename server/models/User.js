@@ -7,6 +7,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
+    lowercase: true,
     validate: [(u) => !!u, "username must have at least 1 character"],
   },
   name: {
@@ -17,11 +18,12 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: [(p) => p.length > 0, "password must have at least 1 character"],
+    select: false,
   },
 });
 
 UserSchema.statics.login = async function (username, password) {
-  const user = await this.findOne({ username });
+  const user = await this.findOne({ username }).select("+password");
 
   if (user) {
     if (await bcrypt.compare(password, user.password)) {

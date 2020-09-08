@@ -6,6 +6,8 @@ const requireAuth = (req, res, next) => {
   if (!res.locals.userId) {
     next(new Error("user not logged in"));
   }
+
+  next();
 };
 module.exports.requireAuth = requireAuth;
 

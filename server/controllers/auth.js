@@ -9,15 +9,16 @@ module.exports.loginPost = async (req, res, next) => {
   try {
     const user = await User.login(username, password);
 
-    res.cookie("jwt", createToken({ id: user._id }), {
-      httpOnly: true,
-      maxAge: JWT_MAX_AGE * 1000,
-      sameSite: "lax",
-    });
-    res.status(200).send({ user: user._id });
+    res
+      .cookie("jwt", createToken({ id: user._id }), {
+        httpOnly: true,
+        maxAge: JWT_MAX_AGE * 1000,
+        sameSite: "lax",
+      })
+      .status(200)
+      .send({ user: user._id });
   } catch (err) {
-    res.status(401);
-    res.cookie("jwt", "", { maxAge: 1 });
+    res.status(401).cookie("jwt", "", { maxAge: 1 });
     next(err);
   }
 };
@@ -32,12 +33,14 @@ module.exports.signupPost = async (req, res, next) => {
       password: await hashPassword(password),
     });
 
-    res.cookie("jwt", createToken({ id: user._id }), {
-      httpOnly: true,
-      maxAge: JWT_MAX_AGE * 1000,
-      sameSite: "lax",
-    });
-    res.status(201).send({ user: user._id });
+    res
+      .cookie("jwt", createToken({ id: user._id }), {
+        httpOnly: true,
+        maxAge: JWT_MAX_AGE * 1000,
+        sameSite: "lax",
+      })
+      .status(201)
+      .send({ user: user._id });
   } catch (err) {
     res.status(422);
     if (err.code === 11000) {
@@ -49,6 +52,5 @@ module.exports.signupPost = async (req, res, next) => {
 };
 
 module.exports.logoutDelete = async (req, res, next) => {
-  res.cookie("jwt", "", { maxAge: 1 });
-  res.send({});
+  res.cookie("jwt", "", { maxAge: 1 }).send({});
 };

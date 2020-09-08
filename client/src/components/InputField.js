@@ -11,13 +11,7 @@ const InputField = React.forwardRef(
     return (
       <FormControl isInvalid={!!error} isRequired={isRequired}>
         <FormLabel htmlFor={name}>{label || name}</FormLabel>
-        <Input
-          id={name}
-          name={name}
-          placeholder={name}
-          ref={ref}
-          {...props}
-        ></Input>
+        <Input id={name} name={name} placeholder={name} ref={ref} {...props} />
         {error && <FormErrorMessage>{error}</FormErrorMessage>}
       </FormControl>
     )

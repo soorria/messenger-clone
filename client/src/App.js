@@ -3,14 +3,16 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import { ThemeProvider, CSSReset, ColorModeProvider } from '@chakra-ui/core'
 import { Global, css } from '@emotion/core'
 
+import customTheme from './theme'
+
+import Chat from './pages/chat'
 import Home from './pages/home'
 import Login from './pages/login'
-import SignUp from './pages/signup'
 import NotFound from './pages/notFound'
-import customTheme from './theme'
-import DarkModeToggle from './components/darkModeToggle'
+import SignUp from './pages/signup'
+
 import AuthProvider from './context/authContext'
-import Chat from './pages/chat'
+import ChatContextProvider from './context/chatContext'
 
 function App() {
   return (
@@ -32,12 +34,15 @@ function App() {
               <Route exact path='/' component={Home} />
               <Route exact path='/signup' component={SignUp} />
               <Route exact path='/login' component={Login} />
-              <Route path={['/chat/:username', '/chat']} component={Chat} />
+              <Route path={['/chat/:chatId', '/chat']}>
+                <ChatContextProvider>
+                  <Chat />
+                </ChatContextProvider>
+              </Route>
               <Route path='*' component={NotFound} />
             </Switch>
           </Router>
         </AuthProvider>
-        <DarkModeToggle />
       </ColorModeProvider>
     </ThemeProvider>
   )

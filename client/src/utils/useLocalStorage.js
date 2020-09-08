@@ -4,8 +4,12 @@ import { useEffect } from 'react'
 const useLocalStorage = (key, initialValue) => {
   const [state, setState] = useState(() => {
     const currValue = localStorage.getItem(key)
-    if (currValue != null) {
-      return JSON.parse(currValue)
+    try {
+      if (currValue != null) {
+        return JSON.parse(currValue)
+      }
+    } catch (err) {
+      return initialValue
     }
     return initialValue
   })

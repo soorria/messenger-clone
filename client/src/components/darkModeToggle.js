@@ -1,19 +1,24 @@
 import React from 'react'
 import { useColorMode, IconButton, Box, Tooltip } from '@chakra-ui/core'
 
-const DarkModeToggle = () => {
+const floatingStyles = {
+  pos: 'fixed',
+  bottom: 8,
+  left: 8,
+}
+
+const DarkModeToggle = ({ floating, mr, ...props }) => {
   const { colorMode, toggleColorMode } = useColorMode()
 
   return (
-    <Box pos='fixed' bottom={8} left={8}>
-      <Tooltip
-        hasArrow
-        label={`Use ${colorMode === 'light' ? 'dark' : 'light'} mode`}
-      >
+    <Box {...(floating ? floatingStyles : {})} mr={mr}>
+      <Tooltip hasArrow label='Toggle dark mode'>
         <IconButton
           icon={colorMode === 'light' ? 'moon' : 'sun'}
           isRound
+          variantColor='green'
           onClick={toggleColorMode}
+          {...props}
         />
       </Tooltip>
     </Box>

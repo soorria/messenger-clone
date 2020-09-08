@@ -1,18 +1,23 @@
-import React, { createContext, useContext, useEffect } from 'react'
+import React, { createContext, useCallback, useContext, useEffect } from 'react'
 import api from '../api'
 import useLocalStorage from '../utils/useLocalStorage'
-import { useCallback } from 'react'
+import { useToast } from '@chakra-ui/core'
+import checkNetworkError from '../utils/checkNetworkError'
 
 export const AuthContext = createContext()
 
 const AuthProvider = ({ children }) => {
   const [user, setUser, clearUser] = useLocalStorage('msg:user', null)
+  const toast = useToast()
 
   const refetch = useCallback(async () => {
-    const res = await api.get('/users/me')
-    console.log('refetch response', res)
-    setUser(res?.data?.user)
-  }, [setUser])
+    try {
+      const res = await api.get('/users/me')
+      setUser(res?.data?.user)
+    } catch (err) {
+      checkNetworkError(err, toast)
+    }
+  }, [setUser, toast])
 
   useEffect(() => {
     refetch()
@@ -33,6 +38,4 @@ const AuthProvider = ({ children }) => {
 
 export default AuthProvider
 
-export const useAuth = () => {
-  return useContext(AuthContext)
-}
+export const useAuth = () => useContext(AuthContext)

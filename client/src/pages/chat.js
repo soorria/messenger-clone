@@ -1,18 +1,32 @@
 import React from 'react'
-import { Heading } from '@chakra-ui/core'
-import { useParams, useRouteMatch } from 'react-router'
-import CentreCard from '../components/centreCard'
+import { Grid, CircularProgress } from '@chakra-ui/core'
+import { useParams, Redirect } from 'react-router'
+import ChatSidebar from '../components/chatSidebar'
+import { useAuth } from '../context/authContext'
+import ChatMain from '../components/chatMain'
+import { useChat } from '../context/chatContext'
 
-const Chat = () => {
-  const { username } = useParams()
-  const match = useRouteMatch('/chat/:username')
+function Chat() {
+  const { chatId } = useParams()
+  const { user } = useAuth()
+  const { loading } = useChat()
+
+  if (!user) return <Redirect to='/login' />
+
+  if (loading)
+    return (
+      <Grid h='100%' alignItems='center' justifyContent='center'>
+        <CircularProgress isIndeterminate color='green' />
+      </Grid>
+    )
+
   return (
-    <CentreCard>
-      <Heading>{"This part isn't done yet. :("}</Heading>
-      <p>
-        username: {username}, {JSON.stringify(match)}
-      </p>
-    </CentreCard>
+    <>
+      <Grid templateColumns='350px 1fr' h='100%'>
+        <ChatSidebar selectedChat={chatId} />
+        <ChatMain selectedChat={chatId} />
+      </Grid>
+    </>
   )
 }
 

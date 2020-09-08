@@ -2,7 +2,7 @@ const User = require("../models/User");
 
 module.exports.usersGetAll = async (req, res, next) => {
   try {
-    const users = await User.find().select("-password");
+    const users = await User.find();
     res.send({ users });
   } catch (err) {
     next(err);
@@ -12,7 +12,7 @@ module.exports.usersGetAll = async (req, res, next) => {
 module.exports.usersGetMe = async (req, res, next) => {
   if (res.locals.userId) {
     try {
-      const user = await User.findById(res.locals.userId).select("-password");
+      const user = await User.findById(res.locals.userId);
       res.status(200).send({ user });
     } catch (err) {
       res.status(200).send({ user: null });
@@ -25,7 +25,7 @@ module.exports.usersGetMe = async (req, res, next) => {
 
 module.exports.usersGetById = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.id).select("-password");
+    const user = await User.findById(req.params.id);
 
     if (user) {
       res.send({ user });
@@ -46,9 +46,7 @@ module.exports.userDelete = async (req, res, next) => {
   }
 
   try {
-    const user = await User.findByIdAndDelete(req.params.id).select(
-      "-password"
-    );
+    const user = await User.findByIdAndDelete(req.params.id);
 
     if (user) {
       res.status(204).send({});
