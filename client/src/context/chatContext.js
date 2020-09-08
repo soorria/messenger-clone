@@ -57,7 +57,7 @@ const ChatContextProvider = ({ children }) => {
   }, [toast])
 
   useEffect(() => {
-    socket.current = io('http://localhost:1234', {
+    socket.current = io(process.env.API_URL || 'http://localhost:1234', {
       reconnectionAttempts: 10,
     })
 
