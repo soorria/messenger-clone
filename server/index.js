@@ -40,7 +40,7 @@ const origin = process.env.WEB_URL || "http://localhost:3000";
   app.use(helmet());
   app.use(
     cors({
-      origin
+      origin: true,
       credentials: true,
     })
   );
