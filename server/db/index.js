@@ -9,9 +9,11 @@ async function connectToDB() {
       useCreateIndex: true,
     });
   } catch (err) {
-    console.log("Error connecting to MongoDB:");
-    throw err;
+    console.log("Error connecting to MongoDB", err);
+    process.exit(1);
   }
+
+  console.log("connected to MongoDB");
 }
 
 module.exports = connectToDB;
