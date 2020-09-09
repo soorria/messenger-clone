@@ -113,7 +113,7 @@ const ChatContextProvider = ({ children }) => {
     return () => {
       socket.current.disconnect()
     }
-  }, [chats, toast])
+  }, [toast])
 
   const sendMessage = useCallback((chatId, message) => {
     if (!message) return
