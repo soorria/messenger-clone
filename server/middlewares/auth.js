@@ -12,7 +12,11 @@ const requireAuth = (req, res, next) => {
 module.exports.requireAuth = requireAuth;
 
 const checkAuth = (req, res, next) => {
-  const [type, token] = req.get("authorization")?.split(" ") || [];
+  const authheader = req.get("authorization");
+  let type, token;
+  if (authheader) {
+    [type, token] = authheader.split(" ");
+  }
 
   if (token && type.toLowerCase() === "bearer") {
     try {
@@ -24,8 +28,6 @@ const checkAuth = (req, res, next) => {
   } else {
     res.locals.userId = null;
   }
-
-  console.log(token, res.locals);
 
   if (next) next();
 };
