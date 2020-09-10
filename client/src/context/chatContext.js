@@ -63,12 +63,15 @@ const ChatContextProvider = ({ children }) => {
   }, [toast])
 
   useEffect(() => {
-    socket.current = io(process.env.API_URL || 'http://localhost:1234', {
-      reconnectionAttempts: 10,
-      query: {
-        token,
-      },
-    })
+    socket.current = io(
+      process.env.REACT_APP_API_URL || 'http://localhost:1234',
+      {
+        reconnectionAttempts: 10,
+        query: {
+          token,
+        },
+      }
+    )
 
     socket.current.on('connect', () => {
       console.log('connected to server')
@@ -85,8 +88,7 @@ const ChatContextProvider = ({ children }) => {
           status: 'error',
           description: (
             <span>
-              You're not logged in. Go{' '}
-              <Link href={process.env.PUBLIC_URL + '/login'}>here</Link> to
+              You're not logged in. Go <Link href={'/login'}>here</Link> to
               login.
             </span>
           ),
