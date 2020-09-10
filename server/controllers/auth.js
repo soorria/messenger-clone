@@ -1,7 +1,6 @@
 const User = require("../models/User");
 const { hashPassword } = require("../utils/hash");
 const { createToken } = require("../utils/jwt");
-const { JWT_MAX_AGE } = require("../constants");
 
 module.exports.loginPost = async (req, res, next) => {
   const { username, password } = req.body;

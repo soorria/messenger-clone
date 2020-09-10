@@ -19,7 +19,6 @@ function Login() {
     try {
       await sleep(1000)
       const res = await api.post('/login', data)
-      console.log(res)
       if (res?.data?.token) {
         setToken(res.data.token)
       }

@@ -52,9 +52,7 @@ const origin = process.env.WEB_URL || "http://localhost:3000";
   // Connect to MongoDB with mongoose
   await connectToDB();
 
-  const io = new Server(http, {
-    origins: [origin],
-  });
+  const io = new Server(http);
 
   // Socket connection
   io.on("connection", async (socket) => {
