@@ -48,7 +48,7 @@ const origin = process.env.WEB_URL || "http://localhost:3000";
   // Connect to MongoDB with mongoose
   await connectToDB();
 
-  const io = new Server(http, { origins: "*:*" });
+  const io = new Server(http, { origins: "*:*", cookie: false });
 
   // Socket connection
   io.on("connection", async (socket) => {
@@ -65,6 +65,7 @@ const origin = process.env.WEB_URL || "http://localhost:3000";
     }
 
     socket.on("disconnect", () => {
+      console.log(jwt, userId);
       userIdToSocket.delete(userId);
     });
 
