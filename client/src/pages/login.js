@@ -1,24 +1,28 @@
 import React from 'react'
 import { Heading, Button, Flex, Link, Box, useToast } from '@chakra-ui/core'
 import { Link as RouterLink, Redirect } from 'react-router-dom'
-import InputField from '../components/InputField'
-import CentreCard from '../components/centreCard'
 import { useForm } from 'react-hook-form'
 import api from '../api'
 import sleep from '../utils/sleep'
-import { useAuth } from '../context/authContext'
+import CentreCard from '../components/centreCard'
 import DarkModeToggle from '../components/darkModeToggle'
+import InputField from '../components/InputField'
+import { useAuth } from '../context/authContext'
 import checkNetworkError from '../utils/checkNetworkError'
 
 function Login() {
   const { register, errors, formState, handleSubmit, setError } = useForm()
-  const { user, refetch } = useAuth()
+  const { user, refetch, setToken } = useAuth()
   const toast = useToast()
 
   const onSubmit = async data => {
     try {
       await sleep(1000)
-      await api.post('/login', data)
+      const res = await api.post('/login', data)
+      console.log(res)
+      if (res?.data?.token) {
+        setToken(res.data.token)
+      }
       refetch()
     } catch (err) {
       if (checkNetworkError(err, toast)) return

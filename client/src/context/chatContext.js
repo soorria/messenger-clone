@@ -5,6 +5,7 @@ import React, {
   useState,
   useRef,
 } from 'react'
+import { useToast, Link } from '@chakra-ui/core'
 import io from 'socket.io-client'
 
 import indexise from '../utils/indexise'
@@ -12,8 +13,8 @@ import api from '../api'
 import { useCallback } from 'react'
 import produce from 'immer'
 import checkNetworkError from '../utils/checkNetworkError'
-import { useToast, Link } from '@chakra-ui/core'
 import doNetworkErrorToast from '../utils/doNetworkErrorToast'
+import { useAuth } from './authContext'
 
 export const ChatContext = createContext()
 
@@ -23,17 +24,21 @@ const ChatContextProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
   const toast = useToast()
   const socket = useRef()
+  const { token } = useAuth()
 
   useEffect(() => {
     async function fetchChats() {
       try {
-        const { data } = await api.get('/chat', { params: { populate: true } })
+        const { data } = await api.get('/chat', {
+          params: { populate: true },
+          headers: { Authorization: 'Bearer ' + token },
+        })
         setChats(indexise(data.chats, '_id'))
       } catch (err) {}
       setLoading(false)
     }
     fetchChats()
-  }, [])
+  }, [token])
 
   useEffect(() => {
     async function fetchUsers() {
@@ -47,18 +52,22 @@ const ChatContextProvider = ({ children }) => {
 
     fetchUsers()
 
-    const interval = setInterval(() => {
-      fetchUsers()
-    }, 1000 * 60)
-
-    return () => {
-      clearInterval(interval)
+    if (process.env.NODE_ENV === 'production') {
+      const interval = setInterval(() => {
+        fetchUsers()
+      }, 1000 * 60)
+      return () => {
+        clearInterval(interval)
+      }
     }
   }, [toast])
 
   useEffect(() => {
     socket.current = io(process.env.API_URL || 'http://localhost:1234', {
       reconnectionAttempts: 10,
+      query: {
+        token,
+      },
     })
 
     socket.current.on('connect', () => {
@@ -77,11 +86,13 @@ const ChatContextProvider = ({ children }) => {
           description: (
             <span>
               You're not logged in. Go{' '}
-              <Link href={process.env.PUBLIC_URL + '/login'}>here</Link> to gin.
+              <Link href={process.env.PUBLIC_URL + '/login'}>here</Link> to
+              login.
             </span>
           ),
           position: 'top',
           duration: 9000,
+          isClosable: true,
         })
       }
       console.log('disconnected from server')
@@ -113,7 +124,7 @@ const ChatContextProvider = ({ children }) => {
     return () => {
       socket.current.disconnect()
     }
-  }, [toast])
+  }, [toast, token])
 
   const sendMessage = useCallback((chatId, message) => {
     if (!message) return

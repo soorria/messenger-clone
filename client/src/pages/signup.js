@@ -12,13 +12,16 @@ import checkNetworkError from '../utils/checkNetworkError'
 
 function SignUp() {
   const { register, errors, formState, handleSubmit, setError } = useForm()
-  const { user, refetch } = useAuth()
+  const { user, refetch, setToken } = useAuth()
   const toast = useToast()
 
   const onSubmit = async data => {
     try {
       await sleep(1000)
-      await api.post('/signup', data)
+      const res = await api.post('/signup', data)
+      if (res?.data?.token) {
+        setToken(res.data.token)
+      }
       refetch()
     } catch (err) {
       if (checkNetworkError(err, toast)) return

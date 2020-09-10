@@ -5,7 +5,6 @@ import {
   Modal,
   ModalOverlay,
   ModalHeader,
-  ModalCloseButton,
   ModalBody,
   ModalFooter,
   ModalContent,
@@ -24,7 +23,7 @@ import { useAuth } from '../context/authContext'
 import { useEffect } from 'react'
 import produce from 'immer'
 
-function CreateChatButton({}) {
+function CreateChatButton() {
   const { handleSubmit, register, setValue, getValues } = useForm()
   const { user } = useAuth()
   const { isOpen, onOpen, onClose: setClose } = useDisclosure()

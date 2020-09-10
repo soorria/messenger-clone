@@ -12,9 +12,9 @@ const requireAuth = (req, res, next) => {
 module.exports.requireAuth = requireAuth;
 
 const checkAuth = (req, res, next) => {
-  const token = req.cookies.jwt;
+  const [type, token] = req.get("authorization")?.split(" ") || [];
 
-  if (token) {
+  if (token && type.toLowerCase() === "bearer") {
     try {
       const decoded = verifyToken(token);
       res.locals.userId = decoded.id;
@@ -24,6 +24,8 @@ const checkAuth = (req, res, next) => {
   } else {
     res.locals.userId = null;
   }
+
+  console.log(token, res.locals);
 
   if (next) next();
 };
