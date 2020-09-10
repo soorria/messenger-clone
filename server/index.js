@@ -53,19 +53,21 @@ const origin = process.env.WEB_URL || "http://localhost:3000";
   // Socket connection
   io.on("connection", async (socket) => {
     const jwt = socket.handshake.query.token;
+    console.log(1);
 
     let userId;
 
     try {
       userId = verifyToken(jwt).id;
+      console.log(2);
     } catch (err) {
-      console.log(jwt, err);
+      console.log(3);
       socket.disconnect(true);
       return;
     }
 
     socket.on("disconnect", () => {
-      console.log(jwt, userId);
+      console.log(4, jwt, userId);
       userIdToSocket.delete(userId);
     });
 
