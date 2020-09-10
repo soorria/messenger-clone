@@ -6,18 +6,14 @@ const volleyball = require("volleyball");
 const cors = require("cors");
 const helmet = require("helmet");
 const cookieParser = require("cookie-parser");
-const cookie = require("cookie");
 
 const connectToDB = require("./db");
 const allRoutes = require("./routes");
 const notFound = require("./middlewares/notFound");
 const errorHandler = require("./middlewares/errorHandler");
-const chatSocket = require("./controllers/chat-socket");
 const { verifyToken } = require("./utils/jwt");
 const Chat = require("./models/Chat");
-const { userDelete } = require("./controllers/users");
 const { createChat } = require("./controllers/chat");
-const { requireAuth } = require("./middlewares/auth");
 
 dotenv.config();
 
@@ -52,7 +48,7 @@ const origin = process.env.WEB_URL || "http://localhost:3000";
   // Connect to MongoDB with mongoose
   await connectToDB();
 
-  const io = new Server(http);
+  const io = new Server(http, { origins: "*:*" });
 
   // Socket connection
   io.on("connection", async (socket) => {
@@ -63,6 +59,7 @@ const origin = process.env.WEB_URL || "http://localhost:3000";
     try {
       userId = verifyToken(jwt).id;
     } catch (err) {
+      console.log(jwt, err);
       socket.disconnect(true);
       return;
     }
